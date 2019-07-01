@@ -1,7 +1,30 @@
 from django.shortcuts import render
 import requests
-from .forms import CityForm
+from .forms import CityForm, LoginForm
+from django.http.response import HttpResponseRedirect
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
+
+def login_view(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        import pdb; pdb.set_trace()
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect('/')
+        else:
+            error = 'Invalid login details'
+            return render(request, 'weather/login.html', {'error': error, 'form': form})
+    else:
+        form = LoginForm()
+        return render(request, 'weather/login.html', {'form': form})
+
+
+@login_required(login_url='/login')
 def index(request):
     if request.method == 'POST':
         # create a form instance and populate with data form thr request

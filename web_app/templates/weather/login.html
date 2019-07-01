@@ -1,0 +1,16 @@
+<html lang="en">
+<body>
+    {% if error %}
+        <h3>{{ error }}</h3>
+    {% endif %}
+    <h1>Login</h1>
+    <section class="form">
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Submit">
+        </form>
+
+    </section>
+</body>
+</html>
